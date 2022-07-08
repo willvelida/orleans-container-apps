@@ -143,3 +143,21 @@ resource clientApp 'Microsoft.App/containerApps@2022-03-01' = {
     type: 'SystemAssigned'
   }
 }
+
+module siloAcrPullRoleAssignment 'modules/acrPullRoleAssignment.bicep' = {
+  name: 'siloPullRole'
+  params: {
+    appId: siloApp.id
+    containerRegistryName: containerRegistry.name 
+    principalId: siloApp.identity.principalId
+  }
+}
+
+module clientAcrPullRoleAssignment 'modules/acrPullRoleAssignment.bicep' = {
+  name: 'clientPullRole'
+  params: {
+    appId: clientApp.id
+    containerRegistryName: containerRegistry.name 
+    principalId: clientApp.identity.principalId
+  }
+}
